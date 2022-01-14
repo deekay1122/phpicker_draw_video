@@ -18,6 +18,8 @@ class VideoProcessor {
     
     let queue = DispatchQueue(label: "VisionProcessingQueue")
     
+    
+    
     var videoAsset: AVAsset? {
         didSet {
             readAndDisplayFirstFrame()

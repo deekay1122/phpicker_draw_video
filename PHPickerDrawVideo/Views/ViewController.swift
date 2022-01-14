@@ -168,7 +168,8 @@ extension ViewController: VideoProcessorDelegate {
             DispatchQueue.main.async { // updating the UI needs to happen on the main thread
                 if let frame = frame {
                     
-                    let ciImage = CIImage(cvPixelBuffer: frame).transformed(by: transform)
+                    let ciImage = CIImage(cvPixelBuffer: frame)
+                        .transformed(by: transform) // applying affineTransform here, otherwise a portrait image will be displayed in landscape.
                     let ciContext = CIContext(options: nil)
                     guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
                     let uiImage = UIImage(cgImage: cgImage)
@@ -188,7 +189,7 @@ extension ViewController: VideoProcessorDelegate {
                 caShapeLayer.fillColor = UIColor.blue.cgColor
                 caShapeLayer.bounds = self.bodyPointPath.bounds
                 let point = CGPoint(x: value.location.x, y: 1 - value.location.y)
-                var convertedPoint = VNImagePointForNormalizedPoint(point, Int(self.imageView.imageSizeAfterAspectFit.width), Int(self.imageView.imageSizeAfterAspectFit.height))
+                let convertedPoint = VNImagePointForNormalizedPoint(point, Int(self.imageView.imageSizeAfterAspectFit.width), Int(self.imageView.imageSizeAfterAspectFit.height))
                 caShapeLayer.position = convertedPoint
                 self.overlayView.layer.addSublayer(caShapeLayer)
             }
